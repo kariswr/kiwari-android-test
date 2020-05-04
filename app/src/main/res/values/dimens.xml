@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="imageSize">40dp</dimen>
+    <dimen name="timeTextSize">10sp</dimen>
+    <dimen name="titleTextSize">20sp</dimen>
+    <dimen name="logoSize">70dp</dimen>
+    <dimen name="loadingSize">75dp</dimen>
+
+    <dimen name="smallMargin">5dp</dimen>
+    <dimen name="smallPadding">5dp</dimen>
+
+    <dimen name="mediumPadding">10dp</dimen>
+    <dimen name="mediumMargin">10dp</dimen>
+    <dimen name="mediumRadius">10dp</dimen>
+
+    <dimen name="messageMargin">40dp</dimen>
+    <dimen name="inputChar">10</dimen>
+
+</resources>

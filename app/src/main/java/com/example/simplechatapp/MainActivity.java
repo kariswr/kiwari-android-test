@@ -3,11 +3,8 @@ package com.example.simplechatapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,18 +16,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private Button btnLogin;
     private FirebaseAuth firebaseAuth;
-    private FirebaseDatabase firebaseDatabase;
     private FirebaseUser firebaseUser;
     private ProgressBar progressBar;
 
@@ -41,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-        firebaseDatabase = FirebaseDatabase.getInstance();
 
         if (firebaseUser != null ){
             Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
@@ -57,13 +47,20 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showLoading(true);
-                validate(etEmail.getText().toString(), etPassword.getText().toString());
+                if (etEmail.getText().toString().equals("") || etPassword.getText().toString().equals("")){
+                    Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.emptyCred), Toast.LENGTH_SHORT);
+                    toast.getView().setBackgroundColor(getResources().getColor(R.color.lightRed));
+                    toast.show();
+                } else {
+                    showLoading(true);
+                    validate(etEmail.getText().toString(), etPassword.getText().toString());
+                }
             }
         });
     }
 
     private void validate(String email, String password){
+        //validate the email and password to firebase
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -72,13 +69,13 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.loginSuc), Toast.LENGTH_SHORT);
                     View view = toast.getView();
-                    view.setBackgroundColor(Color.GREEN);
+                    view.setBackgroundColor(getResources().getColor(R.color.lightGreen));
                     toast.show();
                 } else {
                     showLoading(false);
                     Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.loginFail), Toast.LENGTH_SHORT);
                     View view = toast.getView();
-                    view.setBackgroundColor(Color.RED);
+                    view.setBackgroundColor(getResources().getColor(R.color.lightRed));
                     toast.show();
                 }
             }
@@ -86,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showLoading(boolean show){
+        //show progress bar (loading)
         if (show){
             progressBar.setVisibility(View.VISIBLE);
             btnLogin.setEnabled(false);

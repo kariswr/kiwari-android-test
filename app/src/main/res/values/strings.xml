@@ -1,13 +1,19 @@
 <resources>
     <string name="app_name">SimpleChatApp</string>
 
-    <string name="email">Email..</string>
-    <string name="password">Password..</string>
+    <string name="email">Email…</string>
+    <string name="password">Password…</string>
 
-    <string name="logoutMenu">Logout</string>
+    <string name="login">Login</string>
     <string name="loginSuc">Login Succeeded</string>
     <string name="loginFail">Invalid Credentials</string>
+
+    <string name="logoutMenu">Logout</string>
     <string name="logoutSuc">Logout Succeeded</string>
     <string name="logoutFail">Logout Failed</string>
+
+    <string name="emptyCred">Credentials cannot be empty</string>
+    <string name="emptyMessage">Cannot send empty message</string>
+    <string name="typeHint">Type a message… </string>
 
 </resources>
