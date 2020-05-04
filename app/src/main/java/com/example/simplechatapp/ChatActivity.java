@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -61,6 +62,7 @@ public class ChatActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+
         firebaseDatabase = FirebaseDatabase.getInstance();
 
         //get 1 other user, there is 2 hardcoded user in firebase
@@ -108,8 +110,9 @@ public class ChatActivity extends AppCompatActivity {
             case R.id.logout:
                 try {
                     firebaseAuth.signOut();
-                    Intent intent = new Intent(ChatActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    finish();
+//                    Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+//                    startActivity(intent);
                     Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.logoutSuc), Toast.LENGTH_SHORT);
                     View view = toast.getView();
                     view.setBackgroundColor(getResources().getColor(R.color.lightGreen));
@@ -135,22 +138,24 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
-                    user.setUserId(snapshot.getKey());
-                    if (!user.getUserId().equals(firebaseUser.getUid())) {
-                        opponentUser = user;
+                    if (user != null){
+                        user.setUserId(snapshot.getKey());
+                        if (!user.getUserId().equals(firebaseUser.getUid())) {
+                            opponentUser = user;
 
-                        getSupportActionBar().setTitle(opponentUser.getName());
-                        Glide.with(getApplicationContext()).load(opponentUser.getAvatar()).placeholder(getResources().getDrawable(R.drawable.ic_action_profile)).into(toolbarImg);
+                            Objects.requireNonNull(getSupportActionBar()).setTitle(opponentUser.getName());
+                            Glide.with(getApplicationContext()).load(opponentUser.getAvatar()).placeholder(getResources().getDrawable(R.drawable.ic_action_profile)).into(toolbarImg);
 
-                        if (firebaseUser.getUid().toCharArray()[0] < opponentUser.getUserId().toCharArray()[0] ){
-                            keyChat = firebaseUser.getUid() + opponentUser.getUserId();
-                        } else {
-                            keyChat = opponentUser.getUserId() + firebaseUser.getUid();
+                            if (firebaseUser.getUid().toCharArray()[0] < opponentUser.getUserId().toCharArray()[0] ){
+                                keyChat = firebaseUser.getUid() + opponentUser.getUserId();
+                            } else {
+                                keyChat = opponentUser.getUserId() + firebaseUser.getUid();
+                            }
+
+                            toolbarTitle.setText(opponentUser.getName());
+                            getChat();
+                            break;
                         }
-
-                        toolbarTitle.setText(opponentUser.getName());
-                        getChat();
-                        break;
                     }
                 }
             }
@@ -204,7 +209,7 @@ public class ChatActivity extends AppCompatActivity {
                     recyclerView.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
+                            recyclerView.smoothScrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount());
                         }
                     }, 100);
                 }

@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     View view = toast.getView();
                     view.setBackgroundColor(getResources().getColor(R.color.lightGreen));
                     toast.show();
+                    showLoading(false);
                 } else {
                     showLoading(false);
                     Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.loginFail), Toast.LENGTH_SHORT);
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             btnLogin.setEnabled(true);
             etEmail.setEnabled(true);
             etPassword.setEnabled(true);
+            etPassword.setText("");
         }
     }
 }
